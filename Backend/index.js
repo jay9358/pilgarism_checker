@@ -3,54 +3,13 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import path from 'path';
 import cors from 'cors';
-// import { v2 as cloudinary } from 'cloudinary'; // Updated import for Cloudinary
-// import { CloudinaryStorage } from 'multer-storage-cloudinary'; // Added import for Cloudinary storage
 import { Storage } from '@google-cloud/storage'; // Updated import for Google Cloud Storage
 
 const app = express();
 const PORT = 3000;
 app.use(cors());
-// Multer configuration
-// const Inputstorage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, './input'); // Set your desired upload directory
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-//     }
-// });
-// cloudinary.config({ 
-//     cloud_name: 'dqyaqiwwt', 
-//     api_key: '755337683328969', 
-//     api_secret: 'ZzL_8gmO49zRAYRX4rKNYw7jEvA' 
-//   });
-//   const cloudinaryStorageInput = new CloudinaryStorage({
-//     cloudinary: cloudinary,
-//     params: {
-//         folder: 'input', // Set your desired upload directory for input files
-//         format: async (req, file) => 'png', // You can set the format or remove this line
-//         public_id: (req, file) => `${file.fieldname}-${Date.now()}`,
-//     },
-// });
-
-// const cloudinaryStorageDataset = new CloudinaryStorage({
-//     cloudinary: cloudinary,
-//     params: {
-//         folder: 'dataset', // Set your desired upload directory for dataset files
-//         format: async (req, file) => 'png', // You can set the format or remove this line
-//         public_id: (req, file) => `${file.fieldname}-${Date.now()}`,
-//     },
-// });
-// const inputupload = multer({ storage: cloudinaryStorageInput });
-// const dataupload = multer({ storage: cloudinaryStorageDataset });
-// const dataset = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, './Dataset'); // Set your desired upload directory
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-//     }
-// });
+const inputText=[];
+const datasetText=[];
 
 const inputFilesArray = [];
 const datasetFilesArray = [];
@@ -99,7 +58,7 @@ const authinput=[]
 const authdataset=[]
 
 // Route for file upload
-app.post('/uploadinput', inputupload.array('files', 1), async(req, res) => {
+app.post('/uploadinput', inputupload.array('files'), async(req, res) => {
 try{
     const inputFiles = req.files;
 
@@ -129,6 +88,8 @@ try{
       const authenticatedUrls = await generateAuthenticatedUrls(inputFilesArray);
       authinput.push(...authenticatedUrls)
       console.log(authinput);
+
+      await getText(authinput,inputText);
       // Perform additional actions if needed
   
       res.status(200).send('Files uploaded successfully.');
@@ -169,7 +130,7 @@ try{
     authdataset.push(...authenticatedUrls)
     console.log(authdataset);
    
-
+    await getText(authdataset,datasetText);
     res.status(200).send('Files uploaded successfully.');
 } 
 
@@ -178,6 +139,80 @@ catch(error){
     res.status(500).send('Internal Server Error');
 }
 });
+
+
+
+
+
+
+async function getText(urls,textArray){
+    try {
+        const apiKey = "UIgyVTAZWZhSAGrNhmSTwKwQCFVl2XNk";
+        const apiEndpoint = "https://api.apilayer.com/image_to_text/url";
+    
+        // Use Promise.all to fetch text for all URLs concurrently
+        const fetchPromises = urls.map(async (url) => {
+          const requestOptions = {
+            method: 'GET',
+            headers: new Headers({ 'apikey': apiKey }),
+          };
+    
+          // Replace {url} in the API endpoint with the current URL
+          const imageUrl = `${apiEndpoint}?url=${encodeURIComponent(url)}`;
+    
+          const response = await fetch(imageUrl, requestOptions);
+          const result = await response.text();
+    
+          return result;
+        });
+    
+        // Wait for all fetchPromises to resolve
+        const results = await Promise.all(fetchPromises);
+    
+        // Add all the extracted text to the textArray
+        try {
+            const results = await Promise.all(fetchPromises);
+        
+            // Log the content of the results variable
+            console.log('Results:', results);
+        
+            // Parse each JSON string in the array
+            const parsedResults = results.map(jsonString => JSON.parse(jsonString));
+        
+            // Extract the all_text property from each parsed result
+            const allTextArray = parsedResults.map(result => result.all_text);
+        
+            console.log('All Text Array:', allTextArray);
+        
+        } catch (error) {
+            console.error('Error extracting text:', error);
+        }
+      
+       
+      } catch (error) {
+        console.error('Error extracting text:', error);
+      }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // MongoDB connection (you can replace this with your own database connection)
 

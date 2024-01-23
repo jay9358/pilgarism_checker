@@ -52,7 +52,7 @@ function Checker() {
     const formData = new FormData();
 
     selectedFiles.forEach((file) => {
-      formData.append('filess', file);
+      formData.append('files', file);
     });
 
     try {
