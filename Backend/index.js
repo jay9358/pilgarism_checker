@@ -167,7 +167,7 @@ async function getText(urls,textArray){
         });
     
         // Wait for all fetchPromises to resolve
-        const results = await Promise.all(fetchPromises);
+      
     
         // Add all the extracted text to the textArray
         try {
@@ -181,9 +181,10 @@ async function getText(urls,textArray){
         
             // Extract the all_text property from each parsed result
             const allTextArray = parsedResults.map(result => result.all_text);
-        
-            console.log('All Text Array:', allTextArray);
-        
+
+          
+            textArray.push(allTextArray)
+            console.log(textArray);
         } catch (error) {
             console.error('Error extracting text:', error);
         }
