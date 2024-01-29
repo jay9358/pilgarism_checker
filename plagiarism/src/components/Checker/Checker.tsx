@@ -7,6 +7,8 @@ function Checker() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [error, setError] = useState<string>('');
   const [Dataset, setDatasetFiles] = useState<File[]>([]);
+  const [inputUpload,setInput]=useState(false);
+  const [datasetUpload,setDataset]=useState(false);
   const onInputDrop = async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
     if (fileRejections.length > 0) {
       setError('Invalid file. Please upload a valid file.');
@@ -59,6 +61,7 @@ function Checker() {
       await axios.post('http://localhost:3000/uploadinput', formData);
       console.log('Files uploaded successfully');
       setError('');
+      setInput(true);
     } catch (error) {
       console.error('Error uploading files:', error);
       setError('Error uploading files. Please try again.');
@@ -76,6 +79,7 @@ function Checker() {
       await axios.post('http://localhost:3000/uploaddataset', form);
       console.log('Files uploaded successfully');
       setError('');
+      setDataset(true);
     } catch (error) {
       console.error('Error uploading files:', error);
       setError('Error uploading files. Please try again.');
@@ -88,7 +92,10 @@ function Checker() {
 
   return (
     <div className="checker_container">
-      <div className="dropzone">
+      {inputUpload?(
+      <div>uploaded</div>
+       ) :
+      (<div className="dropzone">
         <Dropzone onDrop={onInputDrop}>
           {({ getRootProps, getInputProps }) => (
             <section className="dropzone-container" {...getRootProps()}>
@@ -117,7 +124,7 @@ function Checker() {
          </div>
           
          
-      </div>
+      </div>)}
     
           
       <div className="content">
@@ -136,7 +143,7 @@ function Checker() {
 
           }} onClick={onUploaddataset}>upload</button>
 
-       
+{error && <p style={{ color: 'red' }}>{error}</p>}
         
                   {Dataset.map((file, index) => (
           <div style={{
