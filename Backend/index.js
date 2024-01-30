@@ -89,7 +89,7 @@ try{
       authinput.push(...authenticatedUrls)
       console.log(authinput);
 
-      await getText(authinput,inputText);
+     
       // Perform additional actions if needed
   
       res.status(200).send('Files uploaded successfully.');
@@ -130,9 +130,11 @@ try{
     authdataset.push(...authenticatedUrls)
     console.log(authdataset);
    
-    await getText(authdataset,datasetText);
+
     res.status(200).send('Files uploaded successfully.');
 } 
+
+
 
 catch(error){
     console.error('Error processing the request:', error);
@@ -141,7 +143,19 @@ catch(error){
 });
 
 
+app.get('/gettext', async (req, res) => {
+  try {
+      // Assuming inputText and getText are defined elsewhere
+      await getText(authinput, inputText);
+      // Perform additional actions if needed
+      await getText(authdataset,datasetText);
 
+      res.status(200).send('Text retrieval successful.');
+  } catch (error) {
+      console.error('Error processing the request:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
 
 
 
