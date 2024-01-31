@@ -4,15 +4,15 @@ import multer from 'multer';
 import path from 'path';
 import cors from 'cors';
 import { Storage } from '@google-cloud/storage'; // Updated import for Google Cloud Storage
-
+import {calculateCosineSimilarity} from './utils.js';
 const app = express();
 const PORT = 3000;
 app.use(cors());
-const inputText=[];
-const datasetText=[];
+let inputText=[];
+let datasetText=[];
 
-const inputFilesArray = [];
-const datasetFilesArray = [];
+let inputFilesArray = [];
+let datasetFilesArray = [];
 const storage = new Storage({
     projectId: 'auspicious-rex-411614',
     keyFilename: './keyfile.json',
@@ -42,7 +42,7 @@ const storage = new Storage({
             .file(cleanUrl)
             .getSignedUrl({
                 action: 'read',
-                expires: Date.now() + 3 * 60 * 1000, // URL expires in 3 minutes
+                expires: Date.now() + 120* 60 * 1000, // URL expires in 3 minutes
                 responseDisposition: 'attachment', // Treat the file as an attachment
             });
 
@@ -54,8 +54,8 @@ const storage = new Storage({
 
 
 
-const authinput=[]
-const authdataset=[]
+let authinput=[]
+let authdataset=[]
 
 // Route for file upload
 app.post('/uploadinput', inputupload.array('files'), async(req, res) => {
@@ -84,15 +84,15 @@ try{
       });
   
       const uploadedFileUrls = await Promise.all(fileUploadPromises);
-      inputFilesArray.push(...uploadedFileUrls);
+      inputFilesArray=uploadedFileUrls;
       const authenticatedUrls = await generateAuthenticatedUrls(inputFilesArray);
-      authinput.push(...authenticatedUrls)
+      authinput=authenticatedUrls;
       console.log(authinput);
-
+      const obj={authinput}
      
       // Perform additional actions if needed
   
-      res.status(200).send('Files uploaded successfully.');
+      res.status(200).json(obj);
 }
 catch(error){
     console.error('Error processing the request:', error);
@@ -125,13 +125,13 @@ try{
     });
 
     const uploadedFileUrls = await Promise.all(fileUploadPromises);
-    datasetFilesArray.push(...uploadedFileUrls);
+    datasetFilesArray=uploadedFileUrls;
     const authenticatedUrls = await generateAuthenticatedUrls(datasetFilesArray);
-    authdataset.push(...authenticatedUrls)
+    authdataset=authenticatedUrls
     console.log(authdataset);
-   
+   const obj={authdataset}
 
-    res.status(200).send('Files uploaded successfully.');
+    res.status(200).json(obj);
 } 
 
 
@@ -143,14 +143,19 @@ catch(error){
 });
 
 
-app.get('/gettext', async (req, res) => {
+app.get('/getText', async (req, res) => {
   try {
+    console.log("getting text....")
       // Assuming inputText and getText are defined elsewhere
-      await getText(authinput, inputText);
+      inputText=await getText(authinput, inputText);
       // Perform additional actions if needed
-      await getText(authdataset,datasetText);
+      console.log(inputText)
+      datasetText=await getText(authdataset,datasetText);
+      console.log(datasetText)   ;
+      const responseObj = { inputText, datasetText };
 
-      res.status(200).send('Text retrieval successful.');
+      res.status(200).json(responseObj);
+    
   } catch (error) {
       console.error('Error processing the request:', error);
       res.status(500).send('Internal Server Error');
@@ -197,8 +202,8 @@ async function getText(urls,textArray){
             const allTextArray = parsedResults.map(result => result.all_text);
 
           
-            textArray.push(allTextArray)
-            console.log(textArray);
+            textArray=allTextArray;
+            return textArray;
         } catch (error) {
             console.error('Error extracting text:', error);
         }
@@ -219,7 +224,30 @@ async function getText(urls,textArray){
 
 
 
+app.get('/analyze', async (req, res) => {
+  const inputTextArray = inputText; 
+  try {
+    // Assuming inputText and datasetText arrays are populated in the /getText endpoint
+    const inputTextArray = inputText; 
+    const datasetTextArray = datasetText;
 
+    // Calculate cosine similarity between each input text and dataset text
+    const similarityResults = [];
+
+    for (const inputTextItem of inputTextArray) {
+        const similarities = datasetTextArray.map(datasetTextItem => {
+            return calculateCosineSimilarity(inputTextItem, datasetTextItem);
+        });
+
+        similarityResults.push(similarities);
+    }
+    console.log(similarityResults);
+    res.status(200).json({ similarityResults });
+} catch (error) {
+    console.error('Error processing the request:', error);
+    res.status(500).send('Internal Server Error');
+}
+})
 
 
 

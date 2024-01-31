@@ -2,13 +2,22 @@
   import './checker.css';
   import Dropzone, { FileRejection } from 'react-dropzone';
   import axios from 'axios';
-
+  import { useNavigate } from 'react-router-dom';
+  import { useDataContext } from '../DataContext';
   function Checker() {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [error, setError] = useState<string>('');
     const [Dataset, setDatasetFiles] = useState<File[]>([]);
     const [inputUpload,setInput]=useState(false);
     const [datasetUpload,setDataset]=useState(false);
+    const[showtext,setText]=useState(false);
+    const[getinputText,setInputtext]=useState('');
+    const [loading, setLoading] = useState(false);
+    const { setContextData } = useDataContext();
+    const {setDatasetTextData}=useDataContext();
+    const {setdatasetimgurl}=useDataContext();
+    const {setInputimgurl}=useDataContext();
+    const navigate = useNavigate();// Create a history object
     const onInputDrop = async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       if (fileRejections.length > 0) {
         setError('Invalid file. Please upload a valid file.');
@@ -58,9 +67,10 @@
       });
 
       try {
-        await axios.post('http://localhost:3000/uploadinput', formData);
+        const img=await axios.post('http://localhost:3000/uploadinput', formData);
         console.log('Files uploaded successfully');
         setError('');
+        setInputimgurl(img.data.authinput)
         setInput(true);
       } catch (error) {
         console.error('Error uploading files:', error);
@@ -76,15 +86,36 @@
       });
 
       try {
-        await axios.post('http://localhost:3000/uploaddataset', form);
+        const img=await axios.post('http://localhost:3000/uploaddataset', form);
         console.log('Files uploaded successfully');
         setError('');
+        setdatasetimgurl(img.data.authdataset)
         setDataset(true);
       } catch (error) {
         console.error('Error uploading files:', error);
         setError('Error uploading files. Please try again.');
       }
       
+    }
+
+    const ongetText= async()=>{
+     try{
+      setLoading(true);
+      const inputTextResponse = await axios.get('http://localhost:3000/getText');
+      const inputText = inputTextResponse.data.inputText;
+      const datasettext=inputTextResponse.data.datasetText;
+      setInputtext(inputText[0]);
+      
+      setContextData(inputText[0]);
+      // Use inputText as needed
+      setText(true);
+      setDatasetTextData(datasettext);
+      console.log('Input Text:', inputText);
+      navigate('/text');
+     }
+     catch (error) {
+      console.error('Error retrieving text:', error);
+  }
     }
     useEffect(() => {
       console.log(selectedFiles);
@@ -94,8 +125,11 @@
       <div className="checker_container">
 
   <div className="dropzone">
-        {inputUpload ? (
+    {showtext?(<div style={{color:'white'}}>{getinputText}</div>):(<></>)}
+        {inputUpload ? (<>
+          
           <div style={{color:'white',display:'flex',justifyContent:'center',alignItems:'center'}}>uploaded</div>
+          </>
         ) : (
           <>
             <Dropzone onDrop={onInputDrop}>
@@ -136,8 +170,10 @@
       </div>
 
       <div className="content">
-    {datasetUpload ? (
+    {datasetUpload ? (<>
       <div style={{ color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>uploaded</div>
+      
+      </>
     ) : (
       <>
         <Dropzone onDrop={onDatasetDrop}>
@@ -187,7 +223,7 @@
         }}
         onClick={ongetText}
       >
-        upload
+       {loading ? 'Loading...' : 'Upload'}
       </button>
     )
   }
