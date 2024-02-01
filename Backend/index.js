@@ -236,7 +236,7 @@ app.get('/analyze', async (req, res) => {
 
   
         const similarities = datasetTextArray.map(datasetTextItem => {
-            return calculateCosineSimilarity(inputTextArray[0], datasetTextItem);
+            return calculateCosineSimilarity(inputTextArray, datasetTextItem);
         });
 
         similarityResults.push(similarities);
