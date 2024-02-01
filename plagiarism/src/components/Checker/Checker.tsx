@@ -15,8 +15,8 @@
     const [loading, setLoading] = useState(false);
     const { setContextData } = useDataContext();
     const {setDatasetTextData}=useDataContext();
-    const {setdatasetimgurl}=useDataContext();
-    const {setInputimgurl}=useDataContext();
+    const {setdatasetimgData}=useDataContext();
+    const {setinputimgData}=useDataContext();
     const navigate = useNavigate();// Create a history object
     const onInputDrop = async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       if (fileRejections.length > 0) {
@@ -70,7 +70,8 @@
         const img=await axios.post('http://localhost:3000/uploadinput', formData);
         console.log('Files uploaded successfully');
         setError('');
-        setInputimgurl(img.data.authinput)
+        setinputimgData(img.data.authinput)
+        console.log(img.data.authinput);
         setInput(true);
       } catch (error) {
         console.error('Error uploading files:', error);
@@ -89,7 +90,8 @@
         const img=await axios.post('http://localhost:3000/uploaddataset', form);
         console.log('Files uploaded successfully');
         setError('');
-        setdatasetimgurl(img.data.authdataset)
+        setdatasetimgData(img.data.authdataset)
+        console.log(img.data.authdataset);
         setDataset(true);
       } catch (error) {
         console.error('Error uploading files:', error);

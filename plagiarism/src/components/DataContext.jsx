@@ -6,8 +6,8 @@ export const DataProvider = ({ children }) => {
   const [inputText, setInputText] = useState('');
   const [datasetText, setDatasetText] = useState(''); // Add datasetText state
   const [analyzedtext,setAnalyzedText]=useState(null);
-  const [inputimgurl,setInputimgurl]=useState('');
-  const [datasetimgurl,setdatasetimgurl]=useState('');
+  const [inputimgurl,setInputimgurl]=useState([]);
+  const [datasetimgurl,setdatasetimgurl]=useState([]);
   const setContextData = (text) => {
     setInputText(text);
   };

@@ -166,7 +166,7 @@ app.get('/getText', async (req, res) => {
 
 async function getText(urls,textArray){
     try {
-        const apiKey = "UIgyVTAZWZhSAGrNhmSTwKwQCFVl2XNk";
+        const apiKey = "JNFnXnMS7PxkOvwscQFF9B8lh6Nx9Akw";
         const apiEndpoint = "https://api.apilayer.com/image_to_text/url";
     
         // Use Promise.all to fetch text for all URLs concurrently
@@ -234,13 +234,13 @@ app.get('/analyze', async (req, res) => {
     // Calculate cosine similarity between each input text and dataset text
     const similarityResults = [];
 
-    for (const inputTextItem of inputTextArray) {
+  
         const similarities = datasetTextArray.map(datasetTextItem => {
-            return calculateCosineSimilarity(inputTextItem, datasetTextItem);
+            return calculateCosineSimilarity(inputTextArray[0], datasetTextItem);
         });
 
         similarityResults.push(similarities);
-    }
+    
     console.log(similarityResults);
     res.status(200).json({ similarityResults });
 } catch (error) {

@@ -1,7 +1,7 @@
 // utils.js
 
 function calculateCosineSimilarity(text1, text2) {
-    const tokenize = (text) => text.toLowerCase().split(/\s+/);
+    const tokenize = (text) => text.split(/\s+/);
 
     const getTermFrequency = (text) => {
         const termFrequency = {};
