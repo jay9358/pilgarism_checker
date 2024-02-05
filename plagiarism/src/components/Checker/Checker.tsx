@@ -17,13 +17,16 @@
     const {setDatasetTextData}=useDataContext();
     const {setdatasetimgData}=useDataContext();
     const {setinputimgData}=useDataContext();
+    const{setInputonFiles}=useDataContext();
+    const{setDatasetonFiles}=useDataContext();
     const navigate = useNavigate();// Create a history object
     const onInputDrop = async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       if (fileRejections.length > 0) {
         setError('Invalid file. Please upload a valid file.');
       } else {
         const newFiles = [...selectedFiles, ...acceptedFiles.slice(0, 1 - selectedFiles.length)];
-    
+        console.log(newFiles)
+        setInputonFiles(newFiles);
         // Check file size for each new file
         const sizeLimit = 700 * 1024; // 300 KB in bytes
         const filesWithinSizeLimit = newFiles.every((file) => file.size <= sizeLimit);
@@ -43,7 +46,7 @@
         setError('Invalid file. Please upload a valid file.');
       } else {
         const newFiles = [...Dataset, ...acceptedFiles.slice(0, 100 - Dataset.length)];
-    
+        setDatasetonFiles(newFiles);
         // Check file size for each new file
         const sizeLimit = 2000 * 1024; // 300 KB in bytes
         const filesWithinSizeLimit = newFiles.every((file) => file.size <= sizeLimit);

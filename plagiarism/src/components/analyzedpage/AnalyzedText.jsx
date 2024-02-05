@@ -7,22 +7,29 @@ function AnalyzedText() {
   const { datasetimgurl } = useDataContext();
   const [matchedimg, setMatchedimg] = useState([]);
   const [match, setMatch] = useState(true);
-
+  const {inputfiles}=useDataContext();
+  const {datasetfiles}=useDataContext();
+  const {datasetnames,setnames}=useState([]);
   useEffect(() => {
     setMatch(true);
     let matched = [];
-    const flattenedArray = analyzedtext.flat(); // Flatten the array
+    let datasetname=[];
+    const flattenedArray = analyzedtext.flat();
+     // Flatten the array
     console.log(flattenedArray);
     const datasetlength = datasetimgurl.length;
-  
+    let t=[];
     for (let i = 0; i < datasetlength; i++) {
     console.log(flattenedArray[i]);
       if (flattenedArray[i] >= 0.8) {
         matched.push(datasetimgurl[i]);
+        datasetname.push(datasetfiles[i])
+        t.push(i);
       }
     }
-    
-  
+    console.log(datasetname);
+    let tlength=t.length;
+ 
     if (matched.length === 0) {
      // wrap the string in an array
       setMatch(false);

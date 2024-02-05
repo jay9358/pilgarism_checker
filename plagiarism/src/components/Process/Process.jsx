@@ -10,6 +10,7 @@ function Process() {
   const { inputText } = useDataContext();
   const {datasetText}=useDataContext();
   const {setAnalyzedTextData}=useDataContext();
+
   const [loading,setLoading]=useState(false);
   const AnalyzeSet= async()=>{
     setLoading(true)

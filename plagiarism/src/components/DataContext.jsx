@@ -8,8 +8,16 @@ export const DataProvider = ({ children }) => {
   const [analyzedtext,setAnalyzedText]=useState(null);
   const [inputimgurl,setInputimgurl]=useState([]);
   const [datasetimgurl,setdatasetimgurl]=useState([]);
+  const [inputfiles,setInputfiles]=useState([]);
+  const [datasetfiles,setDatasetfiles]=useState([]);
   const setContextData = (text) => {
     setInputText(text);
+  };
+  const setInputonFiles = (text) => {
+    setInputfiles(text);
+  };
+  const setDatasetonFiles = (text) => {
+    setDatasetfiles(text);
   };
 
   const setDatasetTextData = (text) => {
@@ -30,7 +38,7 @@ export const DataProvider = ({ children }) => {
   };
 
   return (
-    <DataContext.Provider value={{ inputText, setContextData, datasetText, setDatasetTextData,analyzedtext,setAnalyzedTextData,inputimgurl,setinputimgData,datasetimgurl,setdatasetimgData}}>
+    <DataContext.Provider value={{datasetfiles,setDatasetonFiles,inputfiles,setInputonFiles, inputText, setContextData, datasetText, setDatasetTextData,analyzedtext,setAnalyzedTextData,inputimgurl,setinputimgData,datasetimgurl,setdatasetimgData}}>
       {children}
     </DataContext.Provider>
   );
