@@ -37,6 +37,7 @@ function calculateCosineSimilarity(text1, text2) {
     };
 
     const cosineSimilarity = (text1, text2) => {
+        console.log(text1 + "                       ///////////////////                  "+text2)
         const tf1 = getTermFrequency(text1);
         const tf2 = getTermFrequency(text2);
 
