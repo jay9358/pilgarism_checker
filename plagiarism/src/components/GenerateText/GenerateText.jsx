@@ -20,7 +20,7 @@ function GenerateText() {
 
     fetchData();
        // Call the fetchData function
-  }, []); // Include 'text' in the dependency array so that the effect runs when 'text' changes
+  }, [inputText,text]); // Include 'text' in the dependency array so that the effect runs when 'text' changes
 
   return (
     <div>

@@ -42,7 +42,7 @@ function AnalyzedText() {
       setMatchedimg(matched);
       console.log(matchedimg)
     }
-  }, []);
+  },[analyzedtext,datasetimgurl,datasetfiles,matchedimg]);
 const generateText=()=>{
   navigate('/generateText')
 }
