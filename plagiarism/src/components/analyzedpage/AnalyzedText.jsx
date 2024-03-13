@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDataContext } from '../DataContext';
-
+import { useNavigate } from 'react-router-dom';
 function AnalyzedText() {
   const { analyzedtext } = useDataContext();
   const { inputimgurl } = useDataContext();
@@ -10,6 +10,9 @@ function AnalyzedText() {
   const {inputfiles}=useDataContext();
   const {datasetfiles}=useDataContext();
   const {datasetnames,setnames}=useState([]);
+  const[filename,setFilename]=useState([]);
+  let i =0 ;
+  const navigate = useNavigate();
   useEffect(() => {
     setMatch(true);
     let matched = [];
@@ -28,7 +31,9 @@ function AnalyzedText() {
       }
     }
     console.log(datasetname);
-    let tlength=t.length;
+    const filename=datasetname.map(file => file.name);
+    setFilename(filename);
+    console.log(filename)
  
     if (matched.length === 0) {
      // wrap the string in an array
@@ -38,20 +43,24 @@ function AnalyzedText() {
       console.log(matchedimg)
     }
   }, []);
-
+const generateText=()=>{
+  navigate('/generateText')
+}
   return (
     <div className="analyzed_container" style={{ width: '100%', display: 'flex' }}>
       <div className="inputimg_container" style={{ width: '40%' }}>
         <h1>Input Img</h1>
         <img src={inputimgurl} style={{width:'100%'}} alt="" />
+        <button onClick={generateText}></button>
       </div>
       <div className="matchedimg_container" style={{ width: '60%' }}>
         {match ? (
           <>
             <h1>Matched Imgs:</h1>
-            {matchedimg.map((item) => (
+            {matchedimg.map((item,index)=> (
               <div key={item} style={{ width: '100%' }}>
                 <img src={item} style={{width:'100%'}} alt="" />
+                <h3>{filename[index]}</h3>
               </div>
             ))}
           </>

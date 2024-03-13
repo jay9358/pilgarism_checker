@@ -5,12 +5,16 @@ import path from 'path';
 import cors from 'cors';
 import { Storage } from '@google-cloud/storage'; // Updated import for Google Cloud Storage
 import {calculateCosineSimilarity} from './utils.js';
+import bodyParser from 'body-parser';
+import OpenAI from "openai";
+
+const openai = new OpenAI({ apiKey: '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' });
 const app = express();
 const PORT = 3000;
 app.use(cors());
 let inputText=[];
 let datasetText=[];
-
+app.use(bodyParser.json());
 let inputFilesArray = [];
 let datasetFilesArray = [];
 const storage = new Storage({
@@ -248,6 +252,37 @@ app.get('/analyze', async (req, res) => {
     res.status(500).send('Internal Server Error');
 }
 })
+
+
+
+app.post('/generateText', async (req, res) => {
+  try {
+    const text = req.body.inputTextto;
+
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: "system", content: `${text} generate similar content` }],
+      model: "gpt-3.5-turbo",
+    });
+
+    console.log(completion.choices[0].message.content);
+
+    // Add your text generation logic here if needed
+
+    res.status(200).json({ generatedText: completion.choices[0].message.  content }); // Send a response back to the client
+  } catch (error) {
+    console.error('Error generating text:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+
+
+
+
+
+
+
 
 
 
