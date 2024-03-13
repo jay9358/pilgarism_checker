@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './checker.css';
 import Dropzone, { FileRejection } from 'react-dropzone';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDataContext } from '../DataContext';
 
-interface CheckerProps {}
 
-function Checker(props: CheckerProps) {
+
+function Checker() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [error, setError] = useState<string>('');
   const [Dataset, setDatasetFiles] = useState<File[]>([]);
