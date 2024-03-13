@@ -7,11 +7,11 @@ function AnalyzedText() {
   const { datasetimgurl } = useDataContext();
   const [matchedimg, setMatchedimg] = useState([]);
   const [match, setMatch] = useState(true);
-  const {inputfiles}=useDataContext();
+
   const {datasetfiles}=useDataContext();
-  const {datasetnames,setnames}=useState([]);
+
   const[filename,setFilename]=useState([]);
-  let i =0 ;
+
   const navigate = useNavigate();
   useEffect(() => {
     setMatch(true);
