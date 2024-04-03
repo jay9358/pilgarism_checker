@@ -11,6 +11,10 @@
         "src": "/(.*)",
         "dest": "index.js"
       }
-    ]
+    ],
+    "rewrites": [
+        { "source": "/calculate-similarity", "destination": "/calculate-similarity" }
+      ]
+
   }
   
