@@ -10,12 +10,12 @@
     "natural": "^6.10.4",
     "openai": "^4.26.1",
     "tesseract.js": "^5.0.4",
-    "util": "^0.12.5"
+   
   },
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "commonjs",
+  "type": "gaxiosjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node index.js",
