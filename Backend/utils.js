@@ -55,4 +55,4 @@ function calculateCosineSimilarity(text1, text2) {
     return cosineSimilarity(text1, text2);
 }
 
-export { calculateCosineSimilarity };
+module.exports = { calculateCosineSimilarity };;
