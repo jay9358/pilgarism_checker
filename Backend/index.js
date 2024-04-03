@@ -1,7 +1,7 @@
 import express from 'express';
-import mongoose from 'mongoose';
+
 import multer from 'multer';
-import path from 'path';
+
 import cors from 'cors';
 import { Storage } from '@google-cloud/storage'; // Updated import for Google Cloud Storage
 import {calculateCosineSimilarity} from './utils.js';
