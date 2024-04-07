@@ -3,14 +3,45 @@
     "builds": [
       {
         "src": "index.js",
-        "use": "@now/node"
+        "use": "@vercel/node"
       }
     ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "index.js"
-      }
-    ]
+    
+      "rewrites": [
+        { "source": "/uploadinput", "destination": "/api/uploadinput" },
+        { "source": "/uploaddataset", "destination": "/api/uploaddataset" },
+        { "source": "/getText", "destination": "/api/getText" },
+        { "source": "/analyze", "destination": "/api/analyze" },
+        { "source": "/generateText", "destination": "/api/generateText" }
+      ],
+      "routes": [
+        {
+          "src": "/api/uploadinput",
+          "methods": ["POST"],
+          "dest": "<YOUR_EXPRESS_SERVER_FILE>"
+        },
+        {
+          "src": "/api/uploaddataset",
+          "methods": ["POST"],
+          "dest": "<YOUR_EXPRESS_SERVER_FILE>"
+        },
+        {
+          "src": "/api/getText",
+          "methods": ["GET"],
+          "dest": "<YOUR_EXPRESS_SERVER_FILE>"
+        },
+        {
+          "src": "/api/analyze",
+          "methods": ["GET"],
+          "dest": "<YOUR_EXPRESS_SERVER_FILE>"
+        },
+        {
+          "src": "/api/generateText",
+          "methods": ["POST"],
+          "dest": "<YOUR_EXPRESS_SERVER_FILE>"
+        }
+      ]
   }
+    
+  
   
