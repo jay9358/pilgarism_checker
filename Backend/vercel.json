@@ -2,36 +2,38 @@
     "version": 2,
     "builds": [
       {
-        "src": "index.js",
+        "src": "server.js",
         "use": "@vercel/node"
       }
     ],
+
+    
 
       "routes": [
         {
           "src": "/api/uploadinput",
           "methods": ["POST"],
-          "dest": "/index.js"
+          "dest": "/server.js"
         },
         {
           "src": "/api/uploaddataset",
           "methods": ["POST"],
-          "dest": "/index.js"
+          "dest": "/server.js"
         },
         {
           "src": "/api/getText",
           "methods": ["GET"],
-          "dest": "/index.js"
+          "dest": "/server.js"
         },
         {
           "src": "/api/analyze",
           "methods": ["GET"],
-          "dest": "/index.js"
+          "dest": "/server.js"
         },
         {
           "src": "/api/generateText",
           "methods": ["POST"],
-          "dest": "/index.js"
+          "dest": "/server.js"
         }
       ]
   }
