@@ -21,7 +21,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node servers.js",
     "start": "nodemon servers.js",
-    "build": "rm -rf node_modules && npm install && nodemon servers.js"
+    "build": "nodemon servers.js"
   },
   "author": "",
   "license": "ISC",
