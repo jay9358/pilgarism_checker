@@ -6,14 +6,7 @@
         "use": "@vercel/node"
       }
     ],
-    
-      "rewrites": [
-        { "source": "/uploadinput", "destination": "/api/uploadinput" },
-        { "source": "/uploaddataset", "destination": "/api/uploaddataset" },
-        { "source": "/getText", "destination": "/api/getText" },
-        { "source": "/analyze", "destination": "/api/analyze" },
-        { "source": "/generateText", "destination": "/api/generateText" }
-      ],
+
       "routes": [
         {
           "src": "/api/uploadinput",
