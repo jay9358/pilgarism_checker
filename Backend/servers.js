@@ -63,6 +63,7 @@ function calculateCosineSimilarity(text1, text2) {
 
 const openai = new OpenAI({ apiKey: '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' });
 const app = express();
+app.use(bodyParser.json());
 const PORT = 3000;
 app.use(cors());
 let inputText=[];
