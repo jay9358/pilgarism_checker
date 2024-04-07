@@ -114,7 +114,9 @@ const storage = new Storage({
 
 let authinput=[]
 let authdataset=[]
-
+app.get("/",(req,res)=>{
+  res.send("hello World");
+})
 // Route for file upload
 app.post('/uploadinput', inputupload.array('files'), async(req, res) => {
 try{
